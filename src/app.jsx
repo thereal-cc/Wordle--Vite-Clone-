@@ -13,9 +13,12 @@ export default function App() {
   const initialColors = create2DArray(rows, cols, "bg-gray-300");
 
   const [board, setBoard] = useState(initialBoard);
-  const [targetWord, setTargetWord] = useState("");
-  const [turn, setTurn] = useState(0);
   const [cellColors, setCellColors] = useState(initialColors);
+  const [targetWord, setTargetWord] = useState("");
+  const [status, setStatus] = useState("");
+  const [turn, setTurn] = useState(0);
+  const [inGame, setInGame] = useState(true);
+
 
   // Set random word
   useEffect(() => {
@@ -25,19 +28,20 @@ export default function App() {
 
   // Keyboard Click
   const handleKeyPress = (key) => {
-    switch (key) {
-      case "Enter":
-        checkGuess();
-        break;
-      case "Backspace":
-        removeLetterFromGuess();
-        break;
-      case "Reset Game":
-        resetGame();
-        break;
-      default:
-        addLetterToGuess(key);
-        break;
+    if (key !== "Reset Game" && inGame === true) {
+      switch (key) {
+        case "Enter":
+          checkGuess();
+          break;
+        case "Backspace":
+          removeLetterFromGuess();
+          break;
+        default:
+          addLetterToGuess(key);
+          break;
+      } 
+    } else if (key === "Reset Game" && inGame === false) {
+      resetGame();
     }
   };
 
@@ -85,32 +89,32 @@ export default function App() {
       let letterPos = targetWord.indexOf(letter);
 
       if (letterPos === -1) {
-        // Letter is not in word
-        newColors[turn][i] = "bg-gray-500"; // Reset color to default gray
-        console.log("Not In Word");
+        newColors[turn][i] = "bg-gray-500";
       } else {
-        // Letter is in word
         if (letter === targetWord[i]) {
-          // Right Position, set Color to Green
           newColors[turn][i] = "bg-green-500";
-          console.log("Right Position");
           correctLetters += 1;
         } else {
-          // Different Position, set Color to Yellow
           newColors[turn][i] = "bg-yellow-500";
-          console.log("Wrong position");
         }
       }
     }
 
+    // Set Colors of Cells and increase turn
+    setCellColors(newColors);
+    
+    // Increase turns, guess isn't correct
     if (correctLetters !== cols) {
-      // Word is correct
-      setCellColors(newColors);
+      if (turn === 5) { // Invalid movement
+        setStatus("You Lose, The word was: " + targetWord);
+        setInGame(false);
+        return;
+      }
+      // Turn is <= 5
       setTurn((turn) => turn + 1);
-      return
-    } else {
-      setCellColors(newColors);
-      return;
+    } else if (userWord === targetWord) {
+      setStatus("You Win!");
+      setInGame(false);
     }
   }
 
@@ -119,6 +123,8 @@ export default function App() {
     setCellColors(initialColors);
     setTurn(0);
     setTargetWord("");
+    setStatus("")
+    setInGame(true);
   }
 
   const renderCell = (letter, row, col) => (
@@ -130,6 +136,7 @@ export default function App() {
   return (
     <div className="bg-gray-200 h-screen flex flex-col items-center justify-center">
       <div className="flex flex-col items-center mt-8">
+        <div className="font-bold text-xl mb-4">{status}</div>
         <div className="grid grid-cols-5 gap-2">
           {board.map((row, rowIndex) =>
             row.map((cell, colIndex) => renderCell(cell, rowIndex, colIndex))
