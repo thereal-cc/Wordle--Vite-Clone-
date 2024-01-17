@@ -1,6 +1,30 @@
 const words = [
-  "tests",
-  "words"
-]
+  'APPLE',
+  'BEACH',
+  'CHAOS',
+  'DREAM',
+  'EAGLE',
+  'FLAME',
+  'GRACE',
+  'HUMOR',
+  'IVORY',
+  'JOKER',
+  'KIWI',
+  'LEMON',
+  'MAGIC',
+  'NIGHT',
+  'OCEAN',
+  'PANDA',
+  'QUOTA',
+  'RAVEN',
+  'SALSA',
+  'TIGER',
+  'UMBRA',
+  'VIXEN',
+  'WOMAN',
+  'XYLOP',
+  'YOUTH',
+  'ZEBRA'
+];
 
 export default words;

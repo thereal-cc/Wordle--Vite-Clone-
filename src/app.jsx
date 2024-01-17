@@ -23,7 +23,7 @@ export default function App() {
   // Set random word
   useEffect(() => {
     const wordToGuess = words[Math.floor(Math.random() * words.length)];
-    setTargetWord(wordToGuess.toUpperCase());
+    setTargetWord(wordToGuess);
   }, [targetWord]);
 
   // Keyboard Click
