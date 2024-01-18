@@ -19,7 +19,6 @@ export default function App() {
   const [turn, setTurn] = useState(0);
   const [inGame, setInGame] = useState(true);
 
-
   // Set random word
   useEffect(() => {
     const wordToGuess = words[Math.floor(Math.random() * words.length)];
@@ -28,19 +27,21 @@ export default function App() {
 
   // Keyboard Click
   const handleKeyPress = (key) => {
-    if (key !== "Reset Game" && inGame === true) {
+    if (key !== "Reset Game" && inGame) {
       switch (key) {
         case "Enter":
           checkGuess();
           break;
         case "Backspace":
+          setStatus("");
           removeLetterFromGuess();
           break;
         default:
+          setStatus("");
           addLetterToGuess(key);
           break;
       } 
-    } else if (key === "Reset Game" && inGame === false) {
+    } else if (key === "Reset Game" && !inGame) {
       resetGame();
     }
   };
@@ -80,7 +81,7 @@ export default function App() {
     let newColors = [...cellColors];
 
     if (userWord.includes(" ")) {
-      console.log("Invalid Selection");
+      setStatus("Invalid Selection");
       return;
     }
 
