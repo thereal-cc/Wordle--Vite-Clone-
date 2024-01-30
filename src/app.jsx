@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import words from './words.js';
 import Keyboard from './keyboard.jsx';
 
 function create2DArray(rows, cols, parameter) {
   return Array(rows).fill().map(() => Array(cols).fill(parameter));
+}
+
+function randomWord(words) {
+  return words[Math.floor(Math.random() * words.length)];
 }
 
 export default function App() {
@@ -14,16 +18,10 @@ export default function App() {
 
   const [board, setBoard] = useState(initialBoard);
   const [cellColors, setCellColors] = useState(initialColors);
-  const [targetWord, setTargetWord] = useState("");
+  const [targetWord, setTargetWord] = useState(randomWord(words));
   const [status, setStatus] = useState("");
   const [turn, setTurn] = useState(0);
   const [inGame, setInGame] = useState(true);
-
-  // Set random word
-  useEffect(() => {
-    const wordToGuess = words[Math.floor(Math.random() * words.length)];
-    setTargetWord(wordToGuess);
-  }, [targetWord]);
 
   // Keyboard Click
   const handleKeyPress = (key) => {
@@ -123,7 +121,7 @@ export default function App() {
     setBoard(initialBoard);
     setCellColors(initialColors);
     setTurn(0);
-    setTargetWord("");
+    setTargetWord(randomWord(words));
     setStatus("")
     setInGame(true);
   }
